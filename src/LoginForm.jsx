@@ -2,6 +2,7 @@ import { useState } from "react";
 import './LoginForm.css'
 
 export default function LoginForm (){
+
     // handle multiple input tag using a single hooks
     const [FormInput, SetFormInput] = useState({
         Username: "",
@@ -27,6 +28,13 @@ export default function LoginForm (){
             ...prev,
             [name]: type === "checkbox"? checked: value
         }))
+
+        if(Error[name]){
+            SetError((prevError) => ({
+                ...prevError, [name]: ""
+            }))
+        }
+
     }
 
     // Handle form submittion
@@ -36,6 +44,7 @@ export default function LoginForm (){
 
         let Display_Error = {}
         let isValide = false
+        
         // verifying user input and display and error if not input was entered
 
         // username entering field
