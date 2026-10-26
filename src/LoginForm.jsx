@@ -2,12 +2,21 @@ import { useState } from "react";
 import './LoginForm.css'
 
 export default function LoginForm (){
+    // handle multiple input tag using a single hooks
     const [FormInput, SetFormInput] = useState({
         Username: "",
         Email: "",
         Password: "",
         Validation: false,
         Currency: "XAF"
+    })
+
+    // handle message error storing for each form section
+    const [Error, SetError] = useState({
+        Username: "",
+        Email: "",
+        Password: "",
+        Validation: ""
     })
 
     // handle input for all input type
@@ -24,12 +33,47 @@ export default function LoginForm (){
     const HandleSubmit = (event) => {
         event.preventDefault()
         console.log(FormInput)
+
+        let Display_Error = {}
+        let isValide = false
+        // verifying user input and display and error if not input was entered
+
+        // username entering field
+        if(!FormInput.Username.trim()){
+            Display_Error.Username = "Username is Required"
+            isValide = false
+        }
+
+        // Email address entering field
+        if(!FormInput.Email.trim()){
+            Display_Error.Email = "Email Address is Required"
+            isValide = false
+        } 
+
+        // Password Entering Field
+        if(!FormInput.Password.trim()){
+            Display_Error.Password = "A Password is Required"
+            isValide = false
+        }
+
+        // Validation checkebox field
+        if(!FormInput.Validation){
+            Display_Error.Validation = "You must agree to the terms of services"
+            isValide = false
+        }
+
+        if(!isValide){
+            SetError(Display_Error)
+                return
+        }
+
     }
 
 return(
-    <>
-    <form className="login-form" onSubmit={HandleSubmit}>
+    <div className="container">
         
+    <form className="login-form" onSubmit={HandleSubmit}>
+        <h1>LOGIN</h1>
         <div>
         <label htmlFor="Username-field">Username</label>
         <input 
@@ -41,6 +85,7 @@ return(
         onChange={HandleChanges}
          />   
         </div>
+        <div>{Error.Username && <span className="error-message">{Error.Username}</span> }</div>
         
           <div>
             <label htmlFor="Email-field">Email Address</label>
@@ -53,6 +98,7 @@ return(
          onChange={HandleChanges}
           />
           </div>
+          <div>{Error.Email && <span className="error-message">{Error.Email}</span> }</div>
          
          <div>
           <label htmlFor="Password-field">Password</label>
@@ -65,11 +111,12 @@ return(
           onChange={HandleChanges}
            /> 
          </div>
+         <div>{Error.Password && <span className="error-message">{Error.Password}</span> }</div>
 
          <div>
             <label htmlFor="currency-field">Select your Currency</label>
             <select 
-            name="currency" 
+            name="Currency" 
             id="currency-field"
             value={FormInput.Currency}
             onChange={HandleChanges}
@@ -89,10 +136,11 @@ return(
             onChange={HandleChanges}
              />
             <label htmlFor="validation-field">I agree to the terms of service and the financial data privacy policy of ADN Expense Tracker.</label>
-            </div> 
+            </div>
+            <div>{Error.Validation && <span className="error-message">{Error.Validation}</span> }</div> 
 
-            <button type="submit"></button>
+            <button type="submit">Submit</button>
     </form>
-    </>
+    </div>
 )
 }
